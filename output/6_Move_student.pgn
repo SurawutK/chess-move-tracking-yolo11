@@ -1,0 +1,11 @@
+[Event "6_Move_student"]
+[Site "?"]
+[Date "2025.12.04"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
+[FEN "1r2kbnq/pppb2p1/3p4/PN1Pp3/4P3/6P1/P1P4P/1R1QKB1R b K - 0 1"]
+[SetUp "1"]
+
+1... Bxb5 2. Rxb5 b6 3. c4 Ne7 4. Rb2 *

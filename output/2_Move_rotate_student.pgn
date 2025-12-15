@@ -1,0 +1,11 @@
+[Event "2_Move_rotate_student"]
+[Site "?"]
+[Date "2025.12.04"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
+[FEN "r2qkbnN/pppb2p1/3p4/n2Pp3/1P2P3/2N5/P1P2KPP/R2Q1B1R b q - 0 1"]
+[SetUp "1"]
+
+1... Qh4+ 2. g3 *

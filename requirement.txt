@@ -1,0 +1,11 @@
+chess
+huggingface-hub
+matplotlib
+numpy
+opencv-python
+pandas
+PyYAML
+torch
+ultralytics
+gdown
+editdistance

@@ -1,0 +1,28 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Environment files
+.env
+.vscode/
+.idea/
+
+# Large files
+*.pt
+*.pth
+*.onnx
+*.mp4
+*.avi
+*.zip
+
+# data folders
+datasets/
+runs/
+
+# unused scripts
+utils/generate_piece_dataset.py
+utils/train_board_localizer.py
+utils/train_pieces_detector.py
+utils/upload_data_to_hf.py
+utils/upload_models_to_hf.py
