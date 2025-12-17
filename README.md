@@ -94,5 +94,5 @@ The models were evaluated on a validation dataset derived from gameplay videos.
 Run the main pipeline on a video file:
 
 ```bash
-python utils/pipeline.py --source "path/to/input_video.mp4" --output path/to/output/game.pgn
+python utils/pipeline.py --source "path/to/input_video.mp4" --output "path/to/output/game.pgn"
 ```
