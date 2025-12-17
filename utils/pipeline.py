@@ -1,6 +1,6 @@
 import cv2
 import torch
-import sys
+import argparse
 from pathlib import Path
 from ultralytics import YOLO
 from board_localizer import BoardLocalizer
@@ -9,22 +9,18 @@ from chess_pgn_generator import ChessPGNGenerator
 from fen_utils import generate_fen_from_dict
 
 # ---- CONFIG ----
-POSE_MODEL_PATH = Path('chess_detection/runs/chessboard_localization/training/yolo11s_pose_run_6/weights/best.pt')
-PIECE_MODEL_PATH = Path('chess_detection/runs/chess-pieces-detection/training/yolo11m_run_3/weights/best.pt')
-
-# Input Video
-VIDEO_PATH = Path(sys.argv[1])
-
-# PGN Saving Path
-SAVING_DIR = Path('chess_detection/output')
-PGN_NAME = f'{VIDEO_PATH.stem}.pgn'
+POSE_MODEL_HF = 'https://huggingface.co/surawut/chess-move-tracking-yolo11/resolve/main/models/yolo11s_pose_chessboard.pt'
+PIECE_MODEL_HF = 'https://huggingface.co/surawut/chess-move-tracking-yolo11/resolve/main/models/yolo11m_pieces.pt'
+POSE_MODEL_PATH = Path(POSE_MODEL_HF)
+PIECE_MODEL_PATH = Path(PIECE_MODEL_HF)
 
 # Device-agnostic Code
 device = '0' if torch.cuda.is_available() else 'cpu'
 
-
-def run_pipeline(video_path: str):
-    print(f'⏳ Processing: {VIDEO_PATH.name}...')
+def run_pipeline(video_path: str, saving_path: str):
+    
+    video_path = Path(video_path)
+    print(f'⏳ Processing: {video_path.name}...')
     
     # ---- Initialize ----
     # 1. Chessboard Localizer
@@ -35,10 +31,10 @@ def run_pipeline(video_path: str):
     # 3. Chess State Analyzer
     state_analyzer = ChessStateAnalyzer(board_size=640, stability_thresh=1.5*30)
     # 4. PGN Engine
-    pgn_engine = ChessPGNGenerator(event_name=f'{VIDEO_PATH.stem}')
+    pgn_engine = ChessPGNGenerator(event_name=f'{video_path.stem}')
     
     # ---- PIPELINE START ----
-    cap = cv2.VideoCapture(VIDEO_PATH)
+    cap = cv2.VideoCapture(video_path)
         
     if not cap.isOpened():
         print('❌ Error opening video.')
@@ -108,9 +104,25 @@ def run_pipeline(video_path: str):
     print(f'\n✨ Final PGN Output: {final_pgn}') 
     
     # ---- SAVING PGN -----
-    SAVING_PATH = SAVING_DIR / PGN_NAME
-    print(f'🔄️ Saving PGN to: {SAVING_PATH}')
-    pgn_engine.save_pgn_file(SAVING_PATH)
+    print(f'🔄️ Saving PGN to: {saving_path}')
+    pgn_engine.save_pgn_file(Path(saving_path))
 
+
+def parse_opt():
+    """
+    Function for Receiving Input from Terminal
+    """
+    parser = argparse.ArgumentParser(description='Chess Move Tracking Pipeline (Convert Chess Play Video into PGN)')
+    # 1. --source (mandatory)
+    parser.add_argument('--source', type=str, help='Path to input video file')
+    # 2. --output (file name for PGN to save)
+    parser.add_argument('--output', type=str, default='output/game.pgn', help='Path to ouput PGN file')
+
+    return parser.parse_args()
+    
 if __name__ == '__main__':
-    run_pipeline(VIDEO_PATH)  
+    # Read command from terminal
+    opt = parse_opt()
+    
+    # Run pipeline function
+    run_pipeline(video_path=opt.source, saving_path=opt.output)

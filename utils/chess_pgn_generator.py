@@ -7,6 +7,7 @@ import chess.pgn
 import re
 from datetime import datetime
 from typing import List, Optional
+from pathlib import Path
 
 class ChessPGNGenerator:
     """
@@ -183,6 +184,10 @@ class ChessPGNGenerator:
             
         """
         pgn_content = self.get_pgn_string()
+        
+        # create saving directory if not existed
+        saving_dir = Path(filename).parent
+        saving_dir.mkdir(parents=True, exist_ok=True)
         
         try:
             with open(filename, 'w') as f:
